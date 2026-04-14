@@ -40,14 +40,15 @@ async function askAI() {
     responseDiv.classList.remove('d-none');
     responseDiv.innerHTML = "<em>Tenker... ⚖️</em>";
 
-    try {
-const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=${API_KEY}`, {
+   try {
+        // Vi bruker 'v1beta' og 'gemini-1.5-flash' - dette er den vanligste kombinasjonen nå
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 contents: [{ 
                     parts: [{ 
-                        text: "Du er en profesjonell juridisk assistent. Svar på norsk, vær presis og bruk et formelt språk: " + input 
+                        text: "Du er en juridisk assistent. Svar på norsk: " + input 
                     }] 
                 }]
             })
@@ -55,7 +56,9 @@ const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/m
 
         const data = await response.json();
         
+        // Dette hjelper oss å se nøyaktig hva feilen er i Console hvis det stopper
         if (data.error) {
+            console.error("Google API Error:", data.error);
             throw new Error(data.error.message);
         }
 
@@ -63,7 +66,5 @@ const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/m
         responseDiv.innerText = aiText;
 
     } catch (error) {
-        responseDiv.innerHTML = `<span class="text-danger">Feil: ${error.message}. Sjekk om API-nøkkelen er gyldig.</span>`;
-        console.error("AI Error:", error);
+        responseDiv.innerHTML = `<span class="text-danger">Beskjed fra Google: ${error.message}</span>`;
     }
-}  
