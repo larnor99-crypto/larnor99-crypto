@@ -31,7 +31,7 @@ async function askAI() {
     responseDiv.innerHTML = "<em>Tenker... ⚖️</em>";
 
     // Denne URL-en er den offisielle for Gemini Pro
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
+const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
     try {
         const response = await fetch(url, {
