@@ -12,6 +12,31 @@
         .dark-mode { background-color: #121212; color: white; }
         .dark-mode .hero-section { background: #1e1e1e; }
         .calc-box { background: white; color: black; padding: 20px; border-radius: 10px; border: 1px solid #ddd; }
+        .timeline {
+    position: relative;
+    padding: 20px 0;
+    list-style: none;
+}
+.timeline:before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: 40px;
+    width: 2px;
+    background: #dee2e6;
+}
+.timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+    padding-left: 70px;
+}
+.timeline-marker {
+    position: absolute;
+    left: 31px; top: 0;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: #0d6efd;
+    border: 3px solid white;
+}
     </style>
 </head>
 <body>
@@ -67,5 +92,31 @@
                 "Arbeidsforholdet avsluttes: " + sisteDag.toLocaleDateString('no-NO');
         }
     </script>
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="calc-box shadow">
+                <h4>Saksgang: Eksempel på tvistesak</h4>
+                <ul class="timeline mt-4">
+                    <li class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <h6 class="fw-bold">Dag 0: Prosessvarsel sendt</h6>
+                        <p class="small text-muted">Kravet presenteres og frist settes (tvisteloven § 5-2).</p>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="timeline-marker" style="background: #ffc107;"></div>
+                        <h6 class="fw-bold">Uke 2-4: Tilsvar fra motpart</h6>
+                        <p class="small text-muted">Gjennomgang av argumenter og dokumentasjon.</p>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="timeline-marker" style="background: #198754;"></div>
+                        <h6 class="fw-bold">Uke 6: Stevning til tingretten</h6>
+                        <p class="small text-muted">Saken bringes inn for retten dersom minnelig løsning ikke nås.</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
