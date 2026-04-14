@@ -30,21 +30,33 @@ async function askAI() {
     responseDiv.classList.remove('d-none');
     responseDiv.innerHTML = "<em>Tenker... ⚖️</em>";
 
+    // Denne URL-en er den offisielle for Gemini Pro
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
+
     try {
-const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${API_KEY}`, {
+        const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                contents: [{ parts: [{ text: "Du er en juridisk assistent. Svar på norsk: " + input }] }]
+                contents: [{ parts: [{ text: "Svar kort på norsk: " + input }] }]
             })
         });
 
         const data = await response.json();
-        if (data.error) throw new Error(data.error.message);
+        
+        if (data.error) {
+            throw new Error(data.error.message);
+        }
 
-        const aiText = data.candidates[0].content.parts[0].text;
-        responseDiv.innerText = aiText;
+        if (data.candidates && data.candidates[0].content) {
+            const aiText = data.candidates[0].content.parts[0].text;
+            responseDiv.innerText = aiText;
+        } else {
+            responseDiv.innerText = "Fikk et uventet svarformat fra Google.";
+        }
+
     } catch (error) {
+        console.error("Full feilmelding:", error);
         responseDiv.innerHTML = `<span class="text-danger">Feil: ${error.message}</span>`;
     }
 }
