@@ -1,0 +1,31 @@
+
+        body { transition: background-color 0.3s; }
+        .hero-section { padding: 40px 0; background: #f8f9fa; }
+        .dark-mode { background-color: #121212; color: white; }
+        .dark-mode .hero-section { background: #1e1e1e; }
+        .calc-box { background: white; color: black; padding: 20px; border-radius: 10px; border: 1px solid #ddd; }
+        .timeline {
+    position: relative;
+    padding: 20px 0;
+    list-style: none;
+}
+.timeline:before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: 40px;
+    width: 2px;
+    background: #dee2e6;
+}
+.timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+    padding-left: 70px;
+}
+.timeline-marker {
+    position: absolute;
+    left: 31px; top: 0;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: #0d6efd;
+    border: 3px solid white;
+}
