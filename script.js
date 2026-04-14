@@ -1,3 +1,4 @@
+// VERSJON 2.0 - Gemini 3
 function toggleDarkMode() {
     document.body.classList.toggle("dark-mode");
 }
@@ -12,10 +13,10 @@ function beregnSlutt() {
 }
 
 function saveKey() {
-    const key = document.getElementById('userApiKey').value;
+    const key = document.getElementById('userApiKey').value.trim();
     if (!key) return alert("Vennligst lim inn en nøkkel!");
     localStorage.setItem('gemini_key', key);
-    alert("Nøkkelen er lagret lokalt!");
+    alert("Nøkkelen er lagret!");
     document.getElementById('apiSection').classList.add('d-none');
 }
 
@@ -24,39 +25,30 @@ async function askAI() {
     const responseDiv = document.getElementById('aiResponse');
     const API_KEY = localStorage.getItem('gemini_key');
     
-    if (!API_KEY) return alert("Legg inn API-nøkkel under 'Innstillinger' først!");
-    if (!input) return alert("Skriv noe først!");
-
+    if (!API_KEY) return alert("Legg inn API-nøkkel først!");
+    
     responseDiv.classList.remove('d-none');
-    responseDiv.innerHTML = "<em>Tenker... ⚖️</em>";
+    responseDiv.innerHTML = "<em>Kobler til Gemini 3... ⚖️</em>";
 
-    // Denne URL-en er den offisielle for Gemini Pro
-const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${API_KEY}`;
+    // Vi bruker modellen fra dokumentasjonen din: gemini-3-flash-preview
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${API_KEY}`;
 
     try {
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                contents: [{ parts: [{ text: "Svar kort på norsk: " + input }] }]
+                contents: [{ parts: [{ text: "Svar på norsk: " + input }] }]
             })
         });
 
         const data = await response.json();
-        
-        if (data.error) {
-            throw new Error(data.error.message);
-        }
+        if (data.error) throw new Error(data.error.message);
 
-        if (data.candidates && data.candidates[0].content) {
-            const aiText = data.candidates[0].content.parts[0].text;
-            responseDiv.innerText = aiText;
-        } else {
-            responseDiv.innerText = "Fikk et uventet svarformat fra Google.";
-        }
-
+        const aiText = data.candidates[0].content.parts[0].text;
+        responseDiv.innerText = aiText;
     } catch (error) {
-        console.error("Full feilmelding:", error);
         responseDiv.innerHTML = `<span class="text-danger">Feil: ${error.message}</span>`;
+        console.error("DEBUG:", error);
     }
 }
