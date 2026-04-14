@@ -1,19 +1,42 @@
 import streamlit as st
+from pypdf import PdfReader
 
-st.title("⚖️ Juridisk AI-Dashboard")
-st.write("Velkommen! Lim inn tekst under for en rask analyse.")
+st.title("⚖️ Juridisk Risiko-Analysator")
 
-# En tekstboks for inndata
-juridisk_tekst = st.text_area("Lim inn kontraktsklausul her:", "Dette er en hemmelig avtale...")
+opplastet_fil = st.file_uploader("Last opp PDF for risikoanalyse", type=["pdf"])
 
-# En knapp for å starte analysen
-if st.button("Analyser nå"):
-    st.info("Kobler til AI-motor...")
+if opplastet_fil is not None:
+    # Les PDF
+    leser = PdfReader(opplastet_fil)
+    tekst = ""
+    for side in leser.pages:
+        tekst += side.extract_text()
     
-    # Her simulerer vi logikken din fra tidligere
-    if "hemmelig" in juridisk_tekst.lower():
-        st.warning("⚠️ Obs! Dokumentet inneholder konfidensialitetsklausuler.")
+    st.success("Dokumentet er ferdig lest!")
+
+    # --- AI-LOGIKK (REGELMOTOR) ---
+    st.subheader("Analyse-resultater")
+    
+    # Vi definerer hva vi leter etter og hvorfor
+    risiko_sjekk = {
+        "Konkurranseklausul": ["karantene", "konkurranseforbud", "karantenetid"],
+        "Taushetsplikt": ["konfidensialitet", "taushet", "NDA"],
+        "Oppsigelse": ["oppsigelsesfrist", "fratredelse", "avskjed"],
+        "Lovvalg": ["verneting", "lovvalg", "voldgift"]
+    }
+
+    funn = []
+    for kategori, nøkkelord in risiko_sjekk.items():
+        for ord in nøkkelord:
+            if ord in tekst.lower():
+                funn.append({"Kategori": kategori, "Treff på ord": ord, "Status": "⚠️ Sjekk nærmere"})
+                break # Gå til neste kategori hvis vi finner ett treff
+
+    if funn:
+        st.table(funn)
     else:
-        st.success("✅ Ingen kritiske nøkkelord funnet umiddelbart.")
-        
-    st.write("Analyse ferdigstilt kl. 18:26 (simulert).")
+        st.balloons()
+        st.success("Ingen kritiske nøkkelord funnet i denne omgang!")
+
+    with st.expander("Se hele teksten"):
+        st.write(tekst)
