@@ -16,4 +16,15 @@
             document.getElementById('resultat').innerHTML = 
                 "Arbeidsforholdet avsluttes: " + sisteDag.toLocaleDateString('no-NO');
         }
+ function askAI() {
+    const input = document.getElementById('aiInput').value;
+    const responseDiv = document.getElementById('aiResponse');
     
+    if(!input) return alert("Vennligst skriv noe først!");
+
+    responseDiv.classList.remove('d-none');
+    responseDiv.innerHTML = "<em>Tenker... (Kobler til Gemini)</em>";
+    
+    console.log("Bruker spurte om:", input);
+    // Her skal vi straks legge inn den faktiske koblingen til API-en
+}   
